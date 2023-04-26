@@ -1,4 +1,3 @@
-D:\MyProgs\SOCIS_API\SOCIS_API\bin\Debug\net6.0\appsettings.Development.json
 D:\MyProgs\SOCIS_API\SOCIS_API\bin\Debug\net6.0\appsettings.json
 D:\MyProgs\SOCIS_API\SOCIS_API\bin\Debug\net6.0\SOCIS_API.staticwebassets.runtime.json
 D:\MyProgs\SOCIS_API\SOCIS_API\bin\Debug\net6.0\SOCIS_API.exe

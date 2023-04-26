@@ -37,7 +37,7 @@ namespace SOCIS_API.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Name=ConnectionStrings:default",options=>options.EnableRetryOnFailure());
+                optionsBuilder.UseSqlServer("Name=ConnectionStrings:default");
             }
         }
 
@@ -70,6 +70,10 @@ namespace SOCIS_API.Model
 
             modelBuilder.Entity<Person>(entity =>
             {
+                entity.HasIndex(e => e.UserName, "UniqueUsernameIndx")
+                    .IsUnique()
+                    .HasFilter("([UserName] IS NOT NULL)");
+
                 entity.HasOne(d => d.Department)
                     .WithMany(p => p.People)
                     .HasForeignKey(d => d.DepartmentId)

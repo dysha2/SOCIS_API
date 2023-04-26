@@ -34,9 +34,9 @@ namespace SOCIS_API.Model
         [StringLength(30)]
         public string? UserName { get; set; }
         public int? RoleId { get; set; }
-        [StringLength(2048)]
+        [StringLength(256)]
         public string? Password { get; set; }
-        [StringLength(1024)]
+        [StringLength(256)]
         public string? PasswordSalt { get; set; }
 
         [ForeignKey("DepartmentId")]
