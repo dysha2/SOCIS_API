@@ -1,0 +1,36 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "791bd283-8636-4756-af28-e902eac09864": {
+      "ProjectGuid": "791bd283-8636-4756-af28-e902eac09864",
+      "DisplayName": "SOCIS_API",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Прочие файлы",
+      "ColorIndex": -1
+    },
+    "bcb27ab4-4233-4eb7-b72f-d9df480675a1": {
+      "ProjectGuid": "bcb27ab4-4233-4eb7-b72f-d9df480675a1",
+      "DisplayName": "WpfOftenFunctions",
+      "ColorIndex": 1
+    },
+    "d4bd73c2-a80c-4f13-ab1e-a6a7ad2fbac5": {
+      "ProjectGuid": "d4bd73c2-a80c-4f13-ab1e-a6a7ad2fbac5",
+      "DisplayName": "HelpfulProjectCSharp",
+      "ColorIndex": 2
+    },
+    "3ebb91bb-f982-4940-a572-afca0d452755": {
+      "ProjectGuid": "3ebb91bb-f982-4940-a572-afca0d452755",
+      "DisplayName": "HelpTest",
+      "ColorIndex": 3
+    },
+    "919fd655-f067-4ba2-b932-d926e85dd6b4": {
+      "ProjectGuid": "919fd655-f067-4ba2-b932-d926e85dd6b4",
+      "DisplayName": "Документы скриптов",
+      "ColorIndex": 4
+    }
+  },
+  "NextColorIndex": 5
+}

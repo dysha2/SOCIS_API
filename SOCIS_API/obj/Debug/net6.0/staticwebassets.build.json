@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "Sj51/kJk0Mf6TwjyFzHljowhYF3AC3Fsy3qb8zc2D1s=",
+  "Source": "SOCIS_API",
+  "BasePath": "_content/SOCIS_API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "SOCIS_API\\wwwroot",
+      "Source": "SOCIS_API",
+      "ContentRoot": "D:\\MyProgs\\SOCIS_API\\SOCIS_API\\wwwroot\\",
+      "BasePath": "_content/SOCIS_API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}
