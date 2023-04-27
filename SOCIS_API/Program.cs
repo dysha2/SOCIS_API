@@ -47,8 +47,9 @@ builder.Services.AddSwaggerGen();
 
 string connection = builder.Configuration.GetConnectionString("default");
 builder.Services.AddDbContext<EquipmentContext>(options => options.UseSqlServer(connection));
-builder.Services.AddTransient<IRequestRep, RequestRep>();
 builder.Services.AddTransient<IAuthRep, AuthRep>();
+builder.Services.AddTransient<IRequestRep, RequestRep>();
+
 
 var app = builder.Build();
 
@@ -58,6 +59,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors(opt => opt.AllowAnyOrigin());
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
