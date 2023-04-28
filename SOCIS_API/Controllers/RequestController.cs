@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace SOCIS_API.Controllers
 {
@@ -7,45 +8,83 @@ namespace SOCIS_API.Controllers
     public class RequestController : Controller
     {
         IRequestRep IRequestRep;
+        ICrudRep ICrudRep;
 
-        public RequestController(IRequestRep iRequestRep)
+        public RequestController(IRequestRep iRequestRep, ICrudRep iCrudRep)
         {
             IRequestRep = iRequestRep;
+            ICrudRep = iCrudRep;
         }
         [HttpGet("GetMyAll"),Authorize]
         public IEnumerable<Request> GetMyRequests()
         {
             return IRequestRep.GetMyAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
-        [HttpGet("GetMy"), Authorize]
-        public Request GetMyRequest(int Id)
+        [HttpGet("GetMy/{id}"), Authorize]
+        public ActionResult<Request> GetMyRequest(int Id)
         {
-            return IRequestRep.GetMy(Id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+            var req = IRequestRep.GetMy(Id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+            if (req is null) return NotFound();
+            return req;
         }
         [HttpPost("Add"),Authorize]
-        public IActionResult AddRequest(int PlaceId, string Description)
+        public IActionResult AddRequest([FromBody]Request req)
         {
             try
             {
-               IRequestRep.Create(PlaceId, Description, int.Parse(HttpContext.User.Claims.First(x=>x.Type=="Id").Value));
-               return Ok();
+                if (req is not null)
+                {
+                    req.DeclarantId = int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value);
+                    bool result = ICrudRep.Create(req);
+                    if (result)
+                        return Ok();
+                }
+                return BadRequest();
             }
-            catch (Exception ex) { return BadRequest(ex.Message + "\r\n" + ex.InnerException.Message); }
-
-
+            catch (Exception ex)
+            {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }
         }
-        [HttpPost("Update"), Authorize]
-        public IActionResult UpdateRequest(int RequestId, string? Description, int? PlaceId, bool IsComplete)
+        [HttpPut("Update/{id}"), Authorize]
+        public IActionResult UpdateRequest(int id, [FromBody] Request newReq)
         {
             try
             {
-                IRequestRep.Update(RequestId, Description, PlaceId, IsComplete, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
-                return Ok();
+                if (newReq is not null)
+                {
+                    var oldReq = IRequestRep.GetMy(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                    if (oldReq is not null)
+                    {
+                        if (oldReq.DeclarantId == int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value))
+                        {
+                            if (oldReq.DateTimeEnd is null)
+                            {
+                                oldReq.DateTimeEnd = newReq.DateTimeEnd;
+                                oldReq.Description = newReq.Description;
+                                oldReq.PlaceId = newReq.PlaceId;
+                                ICrudRep.Update(oldReq);
+                                return Ok();
+                            }
+                            else
+                            {
+                                return BadRequest("Request is done yet. Update banned");
+                            }
+                        }
+                        else
+                        {
+                            return BadRequest("Your can`t change declarant");
+                        }
+                    }
+                    else
+                    {
+                        return BadRequest("You can`t change another request");
+                    }
+                }
+                return BadRequest("Enter data");
             }
             catch (Exception ex) {
-                string ErrorInfo = ex.Message;
-                if (ex.InnerException is not null) ErrorInfo = ErrorInfo + "\r\n" + ex.InnerException.Message;
-                return BadRequest(ErrorInfo); 
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
             }
         }
     }

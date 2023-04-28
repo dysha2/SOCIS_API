@@ -21,7 +21,6 @@ namespace SOCIS_API.Model
         public DateTime DateTimeStart { get; set; }
         [StringLength(1000)]
         public string Description { get; set; } = null!;
-        public bool IsComplete { get; set; }
         [Precision(0)]
         public DateTime? DateTimeEnd { get; set; }
         public int PlaceId { get; set; }

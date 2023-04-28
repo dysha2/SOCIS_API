@@ -5,12 +5,14 @@ global using SOCIS_API.Interfaces;
 global using System.Linq;
 global using Microsoft.EntityFrameworkCore;
 global using HelpfulProjectCSharp;
+global using HelpfulProjectCSharp.ASP;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,7 @@ string connection = builder.Configuration.GetConnectionString("default");
 builder.Services.AddDbContext<EquipmentContext>(options => options.UseSqlServer(connection));
 builder.Services.AddTransient<IAuthRep, AuthRep>();
 builder.Services.AddTransient<IRequestRep, RequestRep>();
+builder.Services.AddTransient<ICrudRep, CrudRep<EquipmentContext>>();
 
 
 var app = builder.Build();
