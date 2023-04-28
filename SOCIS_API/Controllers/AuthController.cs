@@ -36,9 +36,9 @@ namespace SOCIS_API.Controllers
                     new Claim(ClaimTypes.Role, person.Role.Role1),
                     new Claim("Id",person.Id.ToString())
                 });
-                return Ok(new { Token = JwtTools.GenerateJwtToken(identity, _Configuration["AuthOptions:key"], _Configuration["AuthOptions:Issuer"], _Configuration["AuthOptions:Audience"]), Message = "Success" });
+                return Ok(new { Token = JwtTools.GenerateJwtToken(identity, _Configuration["AuthOptions:key"], _Configuration["AuthOptions:Issuer"], _Configuration["AuthOptions:Audience"])});
             }
-            return BadRequest("Вы ещё не смешарик");
+            return Unauthorized();
         }
     }
 }
