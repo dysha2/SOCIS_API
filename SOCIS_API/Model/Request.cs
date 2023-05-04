@@ -24,6 +24,7 @@ namespace SOCIS_API.Model
         [Precision(0)]
         public DateTime? DateTimeEnd { get; set; }
         public int PlaceId { get; set; }
+        public bool IsComplete { get; set; }
 
         [ForeignKey("DeclarantId")]
         [InverseProperty("Requests")]

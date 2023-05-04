@@ -51,6 +51,7 @@ string connection = builder.Configuration.GetConnectionString("default");
 builder.Services.AddDbContext<EquipmentContext>(options => options.UseSqlServer(connection));
 builder.Services.AddTransient<IAuthRep, AuthRep>();
 builder.Services.AddTransient<IRequestRep, RequestRep>();
+builder.Services.AddTransient<IPersonRep, PersonRep>();
 builder.Services.AddTransient<ICrudRep, CrudRep<EquipmentContext>>();
 
 
@@ -61,7 +62,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+} 
 app.UseCors(opt => opt.AllowAnyOrigin());
 app.UseDefaultFiles();
 app.UseStaticFiles();

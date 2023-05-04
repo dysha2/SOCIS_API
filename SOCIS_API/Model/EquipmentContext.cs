@@ -87,6 +87,7 @@ namespace SOCIS_API.Model
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.People)
                     .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Person_Role");
             });
 

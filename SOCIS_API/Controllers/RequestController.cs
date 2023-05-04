@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Net;
 
 namespace SOCIS_API.Controllers
 {
@@ -8,12 +9,10 @@ namespace SOCIS_API.Controllers
     public class RequestController : Controller
     {
         IRequestRep IRequestRep;
-        ICrudRep ICrudRep;
 
-        public RequestController(IRequestRep iRequestRep, ICrudRep iCrudRep)
+        public RequestController(IRequestRep iRequestRep)
         {
             IRequestRep = iRequestRep;
-            ICrudRep = iCrudRep;
         }
         [HttpGet("GetMyAll"),Authorize]
         public IEnumerable<Request> GetMyRequests()
@@ -32,56 +31,21 @@ namespace SOCIS_API.Controllers
         {
             try
             {
-                if (req is not null)
-                {
-                    req.DeclarantId = int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value);
-                    bool result = ICrudRep.Create(req);
-                    if (result)
-                        return Ok();
-                }
-                return BadRequest();
-            }
-            catch (Exception ex)
+                IRequestRep.Add(req, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return CreatedAtAction(nameof(GetMyRequest), new { Id = req.Id }, req);
+            } catch (Exception ex)
             {
                 return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
             }
+
         }
         [HttpPut("Update/{id}"), Authorize]
         public IActionResult UpdateRequest(int id, [FromBody] Request newReq)
         {
             try
             {
-                if (newReq is not null)
-                {
-                    var oldReq = IRequestRep.GetMy(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
-                    if (oldReq is not null)
-                    {
-                        if (oldReq.DeclarantId == int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value))
-                        {
-                            if (oldReq.DateTimeEnd is null)
-                            {
-                                oldReq.DateTimeEnd = newReq.DateTimeEnd;
-                                oldReq.Description = newReq.Description;
-                                oldReq.PlaceId = newReq.PlaceId;
-                                ICrudRep.Update(oldReq);
-                                return Ok();
-                            }
-                            else
-                            {
-                                return BadRequest("Request is done yet. Update banned");
-                            }
-                        }
-                        else
-                        {
-                            return BadRequest("Your can`t change declarant");
-                        }
-                    }
-                    else
-                    {
-                        return BadRequest("You can`t change another request");
-                    }
-                }
-                return BadRequest("Enter data");
+                IRequestRep.Update(id,newReq, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return NoContent();
             }
             catch (Exception ex) {
                 return BadRequest(ValidateAndErrorsTools.GetInfo(ex));

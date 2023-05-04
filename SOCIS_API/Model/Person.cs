@@ -33,7 +33,7 @@ namespace SOCIS_API.Model
         public string? Comment { get; set; }
         [StringLength(30)]
         public string? UserName { get; set; }
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
         [StringLength(256)]
         public string? Password { get; set; }
         [StringLength(256)]
@@ -47,7 +47,7 @@ namespace SOCIS_API.Model
         public virtual Post? Post { get; set; }
         [ForeignKey("RoleId")]
         [InverseProperty("People")]
-        public virtual Role? Role { get; set; }
+        public virtual Role Role { get; set; } = null!;
         [InverseProperty("Declarant")]
         public virtual ICollection<Request> Requests { get; set; }
         [InverseProperty("Person")]
