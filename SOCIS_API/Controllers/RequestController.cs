@@ -9,47 +9,80 @@ namespace SOCIS_API.Controllers
     public class RequestController : Controller
     {
         IRequestRep IRequestRep;
-
         public RequestController(IRequestRep iRequestRep)
         {
             IRequestRep = iRequestRep;
         }
+        #region Get
         [HttpGet("GetMyAll"),Authorize]
-        public IEnumerable<Request> GetMyRequests()
+        public IEnumerable<Request> GetMyAll()
         {
             return IRequestRep.GetMyAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
         [HttpGet("GetMy/{id}"), Authorize]
-        public ActionResult<Request> GetMyRequest(int Id)
+        public ActionResult<Request> GetMy(int id)
         {
-            var req = IRequestRep.GetMy(Id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+            var req = IRequestRep.GetMy(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
             if (req is null) return NotFound();
             return req;
         }
-        [HttpPost("Add"),Authorize]
-        public IActionResult AddRequest([FromBody]Request req)
+        [HttpGet("Get/{id}"),Authorize(Roles ="admin,laborant")]
+        public ActionResult<Request> Get(int id)
+        {
+            var req = IRequestRep.Get(id);
+            if (req is null) return NotFound();
+            return req;
+        }
+        [HttpGet("GetAll"), Authorize(Roles = "admin,laborant")]
+        public ActionResult<IEnumerable<Request>> GetAll()
+        {
+            return IRequestRep.GetAll();
+        }
+        #endregion
+        #region Post
+        [HttpPost("AddMy"),Authorize]
+        public IActionResult AddMy([FromBody]Request req)
         {
             try
             {
-                IRequestRep.Add(req, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
-                return CreatedAtAction(nameof(GetMyRequest), new { Id = req.Id }, req);
+                IRequestRep.AddMy(req, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return CreatedAtAction(nameof(GetMy), new { Id = req.Id }, req);
             } catch (Exception ex)
             {
                 return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
             }
 
         }
-        [HttpPut("Update/{id}"), Authorize]
-        public IActionResult UpdateRequest(int id, [FromBody] Request newReq)
+        [HttpPost("Add"), Authorize(Roles ="admin,laborant")]
+        public IActionResult Add([FromBody] Request req)
         {
             try
             {
-                IRequestRep.Update(id,newReq, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                IRequestRep.Add(req);
+                return CreatedAtAction(nameof(Get), new { Id = req.Id }, req);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }
+
+        }
+        #endregion
+        #region Put
+        [HttpPut("UpdateMy/{id}"), Authorize]
+        public IActionResult UpdateMy(int id, [FromBody] Request newReq)
+        {
+            try
+            {
+                IRequestRep.UpdateMy(id,newReq, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
                 return NoContent();
             }
             catch (Exception ex) {
                 return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
             }
         }
+        #endregion
+        #region Delete
+        #endregion
     }
 }

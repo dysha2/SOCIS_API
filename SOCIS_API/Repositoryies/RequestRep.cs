@@ -10,7 +10,8 @@ namespace SOCIS_API.Repositoryies
         {
             _context = equipmentContext;
         }
-        public IEnumerable<Request> GetMyAll(int userId)
+        #region Get
+        public List<Request> GetMyAll(int userId)
         {
             return _context.Requests
                 .Where(x => x.DeclarantId == userId)
@@ -21,23 +22,49 @@ namespace SOCIS_API.Repositoryies
         public Request? GetMy(int id, int userId)
         {
             return _context.Requests
-                .Where(x => x.DeclarantId == userId && x.Id==id)
+                .Where(x => x.DeclarantId == userId && x.Id == id)
                 .Include(x => x.Place)
                 .Include(x => x.WorkOnRequests)
                 .FirstOrDefault();
         }
+        public List<Request> GetAll()
+        {
+            return _context.Requests
+                .Include(x => x.Place)
+                .Include(x => x.WorkOnRequests)
+                .ToList();
+        }
 
-        public void Add(Request req, int userId)
+        public Request? Get(int RequestId)
+        {
+            return _context.Requests
+                .Include(x => x.Place)
+                .Include(x => x.WorkOnRequests)
+                .FirstOrDefault(x => x.Id == RequestId);
+        }
+        #endregion
+        #region Add
+        public void AddMy(Request req, int userId)
         {
             req.DeclarantId = userId;
             req.DateTimeStart = new DateTime();
+            req.IsComplete = false;
             req.DateTimeEnd = null;
             _context.Requests.Add(req);
             _context.SaveChanges();
 
         }
-
-        public void Update(int reqId,Request request, int userId)
+        public void Add(Request req)
+        {
+            req.DateTimeStart = new DateTime();
+            req.IsComplete = false;
+            req.DateTimeEnd = null;
+            _context.Requests.Add(req);
+            _context.SaveChanges();
+        }
+        #endregion
+        #region Update
+        public void UpdateMy(int reqId,Request request, int userId)
         {
             Request updateReq = _context.Requests.Find(reqId);
             if (updateReq.IsComplete) throw new Exception("Request is complete. Update banned");
@@ -47,20 +74,12 @@ namespace SOCIS_API.Repositoryies
             updateReq.IsComplete = request.IsComplete;
             _context.SaveChanges();
         }
-
-        public IEnumerable<Request> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Request? Get(int RequestId)
-        {
-            throw new NotImplementedException();
-        }
-
+        #endregion
+        #region Delete
         public void Delete(int reqId)
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

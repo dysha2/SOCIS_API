@@ -4,12 +4,13 @@ namespace SOCIS_API.Interfaces
 {
     public interface IRequestRep
     {
-        IEnumerable<Request> GetAll();
+        List<Request> GetAll();
         Request? Get(int RequestId);
-        IEnumerable<Request> GetMyAll(int userId);
+        List<Request> GetMyAll(int userId);
         Request? GetMy(int RequestId, int userId);
-        void Add(Request req, int userId);
-        void Update(int reqId,Request request,int userId);
+        void AddMy(Request req, int userId);
+        void UpdateMy(int reqId,Request request,int userId);
         void Delete(int reqId);
+        void Add(Request req);
     }
 }
