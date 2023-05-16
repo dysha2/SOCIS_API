@@ -8,12 +8,14 @@
         {
             _context = context;
         }
+
+        #region Get
         public Person? Get(int PersonId)
         {
             return _context.People
                .Include(x => x.Post)
                .Include(x => x.Department)
-               .First(x => x.Id == PersonId);
+               .FirstOrDefault(x => x.Id == PersonId);
         }
 
         public List<Person> GetAll()
@@ -31,5 +33,7 @@
                 .Include(x => x.Department)
                 .First(x => x.Id == userId);
         }
+        #endregion
+
     }
 }
