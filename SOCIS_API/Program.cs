@@ -6,6 +6,7 @@ global using System.Linq;
 global using Microsoft.EntityFrameworkCore;
 global using HelpfulProjectCSharp;
 global using HelpfulProjectCSharp.ASP;
+global using SOCIS_API.ModelDTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -62,8 +63,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-} 
-app.UseCors(opt => opt.AllowAnyOrigin());
+}
+app.UseCors(opt => { opt.AllowAnyHeader(); opt.AllowAnyOrigin(); opt.AllowAnyMethod(); });
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseHttpsRedirection();

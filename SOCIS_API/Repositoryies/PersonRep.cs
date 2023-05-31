@@ -12,18 +12,24 @@
         #region Get
         public Person? Get(int PersonId)
         {
-            return _context.People
+            var person= _context.People
                .Include(x => x.Post)
                .Include(x => x.Department)
                .FirstOrDefault(x => x.Id == PersonId);
+            person.Post = person.Post is not null ? person.Post = new PostDTO(person.Post) : null;
+            person.Department = person.Department is not null ? person.Department = new DepartmentDTO(person.Department) : null;
+            return person;
         }
 
         public List<Person> GetAll()
         {
-            return _context.People
+            var people = _context.People
                 .Include(x => x.Post)
-                .Include(x => x.Department)
+                .Include(x=>x.Department)
                 .ToList();
+            people.ForEach(x => x.Post = x.Post is not null?x.Post=new PostDTO(x.Post):null);
+            people.ForEach(x => x.Department = x.Department is not null ? x.Department = new DepartmentDTO(x.Department) : null);
+            return people;
         }
 
         public Person? GetMy(int userId)
