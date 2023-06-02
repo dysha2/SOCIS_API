@@ -25,6 +25,7 @@ namespace SOCIS_API.Model
         public DateTime? DateTimeEnd { get; set; }
         public int PlaceId { get; set; }
         public bool IsComplete { get; set; }
+        public int RequestStatusId { get; set; }
 
         [ForeignKey("DeclarantId")]
         [InverseProperty("Requests")]
@@ -32,6 +33,9 @@ namespace SOCIS_API.Model
         [ForeignKey("PlaceId")]
         [InverseProperty("Requests")]
         public virtual Place Place { get; set; } = null!;
+        [ForeignKey("RequestStatusId")]
+        [InverseProperty("Requests")]
+        public virtual RequestStatus RequestStatus { get; set; } = null!;
         [InverseProperty("Request")]
         public virtual ICollection<WorkOnRequest> WorkOnRequests { get; set; }
     }

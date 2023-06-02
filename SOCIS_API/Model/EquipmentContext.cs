@@ -24,6 +24,7 @@ namespace SOCIS_API.Model
         public virtual DbSet<Place> Places { get; set; } = null!;
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<Request> Requests { get; set; } = null!;
+        public virtual DbSet<RequestStatus> RequestStatuses { get; set; } = null!;
         public virtual DbSet<RequestUnit> RequestUnits { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Service> Services { get; set; } = null!;
@@ -95,6 +96,8 @@ namespace SOCIS_API.Model
             {
                 entity.Property(e => e.DateTimeStart).HasDefaultValueSql("(sysdatetime())");
 
+                entity.Property(e => e.RequestStatusId).HasDefaultValueSql("((1))");
+
                 entity.HasOne(d => d.Declarant)
                     .WithMany(p => p.Requests)
                     .HasForeignKey(d => d.DeclarantId)
@@ -106,6 +109,12 @@ namespace SOCIS_API.Model
                     .HasForeignKey(d => d.PlaceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Request_Place");
+
+                entity.HasOne(d => d.RequestStatus)
+                    .WithMany(p => p.Requests)
+                    .HasForeignKey(d => d.RequestStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Request_RequestStatus");
             });
 
             modelBuilder.Entity<RequestUnit>(entity =>

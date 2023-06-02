@@ -19,6 +19,16 @@ namespace SOCIS_API.Controllers
         {
             return IRequestRep.GetMyAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
+        [HttpGet("GetMyActiveAll"), Authorize]
+        public IEnumerable<Request> GetMyActiveAll()
+        {
+            return IRequestRep.GetMyActiveAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+        }
+        [HttpGet("GetMyCompletedAll"), Authorize]
+        public IEnumerable<Request> GetMyCompletedAll()
+        {
+            return IRequestRep.GetMyCompletedAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+        }
         [HttpGet("GetMy/{id}"), Authorize]
         public ActionResult<Request> GetMy(int id)
         {

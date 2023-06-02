@@ -13,38 +13,84 @@ namespace SOCIS_API.Repositoryies
         #region Get
         public List<Request> GetMyAll(int userId)
         {
-            return _context.Requests
+            var reqs= _context.Requests
                 .Where(x => x.DeclarantId == userId)
                 .Include(x => x.Place)
-                .Include(x => x.WorkOnRequests)
+                .Include(x=>x.RequestStatus)
                 .ToList();
+            ReqLoadData(reqs);
+            return reqs;
+        }
+        public List<Request> GetMyActiveAll(int userId)
+        {
+            var reqs = _context.Requests
+                .Where(x => x.DeclarantId == userId && x.IsComplete==false)
+                .Include(x => x.Place)
+                .Include(x => x.RequestStatus)
+                .ToList();
+            ReqLoadData(reqs);
+            return reqs;
+        }
+
+        public List<Request> GetMyCompletedAll(int userId)
+        {
+            var reqs = _context.Requests
+                .Where(x => x.DeclarantId == userId && x.IsComplete == true)
+                .Include(x => x.Place)
+                .Include(x => x.RequestStatus)
+                .ToList();
+            ReqLoadData(reqs);
+            return reqs;
         }
         public Request? GetMy(int id, int userId)
         {
-            return _context.Requests
+            var req= _context.Requests
                 .Where(x => x.DeclarantId == userId && x.Id == id)
                 .Include(x => x.Place)
+                .Include(x=>x.RequestStatus)
                 .Include(x => x.WorkOnRequests)
                 .FirstOrDefault();
+            ReqLoadData(req);
+            return req;
         }
         public List<Request> GetAll()
         {
-            return _context.Requests
+           var reqs= _context.Requests
                 .Include(x => x.Place)
-                .Include(x => x.WorkOnRequests)
+                .Include(x => x.RequestStatus)
                 .ToList();
+            ReqLoadData(reqs);
+            return reqs;
         }
 
         public Request? Get(int RequestId)
         {
-            return _context.Requests
+            var req= _context.Requests
                 .Include(x => x.Place)
                 .Include(x => x.WorkOnRequests)
                 .FirstOrDefault(x => x.Id == RequestId);
+            ReqLoadData(req);
+            return req;
         }
-        #endregion
-        #region Add
-        public void AddMy(Request req, int userId)
+        private void ReqLoadData(Request? req)
+        {
+            if (req is not null)
+            {
+                req.Place = new PlaceDTO(req.Place);
+                req.RequestStatus = new RequestStatusDTO(req.RequestStatus);
+            }
+        }
+        private void ReqLoadData(List<Request> reqs)
+        {
+            if (reqs.Count > 0)
+            {
+                reqs.ForEach(x => x.Place = new PlaceDTO(x.Place));
+                reqs.ForEach(x => x.RequestStatus = new RequestStatusDTO(x.RequestStatus));
+            }
+        }
+            #endregion
+            #region Add
+            public void AddMy(Request req, int userId)
         {
             req.DeclarantId = userId;
             req.DateTimeStart = new DateTime();
@@ -80,6 +126,8 @@ namespace SOCIS_API.Repositoryies
         {
             throw new NotImplementedException();
         }
+
+        
         #endregion
     }
 }

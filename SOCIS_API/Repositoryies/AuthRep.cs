@@ -19,7 +19,7 @@ namespace SOCIS_API.Repositoryies
             {
                 Random rnd = new Random();
                 string salt = RegistrationTools.GetRandomKey(rnd.Next(128, 256));
-                string pass = RegistrationTools.GetPasswordMD5(password, salt);
+                string pass = RegistrationTools.GetPasswordSha256(password, salt);
                 person.Password = pass;
                 person.PasswordSalt = salt;
                 _context.SaveChanges();
@@ -34,7 +34,7 @@ namespace SOCIS_API.Repositoryies
             var person = _context.People.Include(x=>x.Role).FirstOrDefault(x=>x.UserName== userName);
             if (person is not null)
             {
-                if (person.Password == RegistrationTools.GetPasswordMD5(password, person.PasswordSalt))
+                if (person.Password == RegistrationTools.GetPasswordSha256(password, person.PasswordSalt))
                 {
                     return person;
                 } return null;

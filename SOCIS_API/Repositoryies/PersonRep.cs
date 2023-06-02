@@ -1,4 +1,6 @@
-﻿namespace SOCIS_API.Repositoryies
+﻿using SOCIS_API.Model;
+
+namespace SOCIS_API.Repositoryies
 {
     public class PersonRep : IPersonRep
     {
@@ -16,8 +18,11 @@
                .Include(x => x.Post)
                .Include(x => x.Department)
                .FirstOrDefault(x => x.Id == PersonId);
-            person.Post = person.Post is not null ? person.Post = new PostDTO(person.Post) : null;
-            person.Department = person.Department is not null ? person.Department = new DepartmentDTO(person.Department) : null;
+            if (person is not null)
+            {
+                person.Post = person.Post is not null ? person.Post = new PostDTO(person.Post) : null;
+                person.Department = person.Department is not null ? person.Department = new DepartmentDTO(person.Department) : null;
+            }
             return person;
         }
 
@@ -27,17 +32,26 @@
                 .Include(x => x.Post)
                 .Include(x=>x.Department)
                 .ToList();
-            people.ForEach(x => x.Post = x.Post is not null?x.Post=new PostDTO(x.Post):null);
-            people.ForEach(x => x.Department = x.Department is not null ? x.Department = new DepartmentDTO(x.Department) : null);
+            if (people.Count > 0)
+            {
+                people.ForEach(x => x.Post = x.Post is not null ? x.Post = new PostDTO(x.Post) : null);
+                people.ForEach(x => x.Department = x.Department is not null ? x.Department = new DepartmentDTO(x.Department) : null);
+            }
             return people;
         }
 
         public Person? GetMy(int userId)
         {
-            return _context.People
+            var person = _context.People
                 .Include(x => x.Post)
                 .Include(x => x.Department)
                 .First(x => x.Id == userId);
+            if (person is not null)
+            {
+                person.Post = person.Post is not null ? person.Post = new PostDTO(person.Post) : null;
+                person.Department = person.Department is not null ? person.Department = new DepartmentDTO(person.Department) : null;
+            }
+            return person;
         }
         #endregion
 

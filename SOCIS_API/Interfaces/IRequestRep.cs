@@ -7,6 +7,8 @@ namespace SOCIS_API.Interfaces
         List<Request> GetAll();
         Request? Get(int RequestId);
         List<Request> GetMyAll(int userId);
+        List<Request> GetMyActiveAll(int userId);
+        List<Request> GetMyCompletedAll(int userId);
         Request? GetMy(int RequestId, int userId);
         void AddMy(Request req, int userId);
         void UpdateMy(int reqId,Request request,int userId);

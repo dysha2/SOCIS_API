@@ -16,9 +16,8 @@ namespace SOCIS_API.Model
 
         [Key]
         public int Id { get; set; }
-        [Column("Role")]
         [StringLength(30)]
-        public string Role1 { get; set; } = null!;
+        public string Name { get; set; } = null!;
         [StringLength(100)]
         public string? Comment { get; set; }
 

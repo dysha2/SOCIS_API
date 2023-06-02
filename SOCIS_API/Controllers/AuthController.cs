@@ -33,7 +33,7 @@ namespace SOCIS_API.Controllers
             {
                 var identity = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.Name, person.UserName),
-                    new Claim(ClaimTypes.Role, person.Role.Role1),
+                    new Claim(ClaimTypes.Role, person.Role.Name),
                     new Claim("Id",person.Id.ToString())
                 });
                 return Ok(new { Token = JwtTools.GenerateJwtToken(identity, _Configuration["AuthOptions:key"], _Configuration["AuthOptions:Issuer"], _Configuration["AuthOptions:Audience"])});
