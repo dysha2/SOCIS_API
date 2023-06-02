@@ -10,6 +10,8 @@ namespace SOCIS_API.Interfaces
         List<Request> GetMyActiveAll(int userId);
         List<Request> GetMyCompletedAll(int userId);
         Request? GetMy(int RequestId, int userId);
+        List<Request> GetMyByImpActiveAll(int userId);
+        List<Request> GetMyByImpCompletedAll(int userId);
         void AddMy(Request req, int userId);
         void UpdateMy(int reqId,Request request,int userId);
         void Delete(int reqId);

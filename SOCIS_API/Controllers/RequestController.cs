@@ -36,6 +36,16 @@ namespace SOCIS_API.Controllers
             if (req is null) return NotFound();
             return req;
         }
+        [HttpGet("GetMyByImpActiveAll"), Authorize(Roles = "admin,laborant")]
+        public IEnumerable<Request> GetMyByImpActiveAll()
+        {
+            return IRequestRep.GetMyByImpActiveAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+        }
+        [HttpGet("GetMyByImpCompletedAll"), Authorize(Roles = "admin,laborant")]
+        public IEnumerable<Request> GetMyByImpCompletedAll()
+        {
+            return IRequestRep.GetMyByImpCompletedAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+        }
         [HttpGet("Get/{id}"),Authorize(Roles ="admin,laborant")]
         public ActionResult<Request> Get(int id)
         {

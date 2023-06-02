@@ -72,6 +72,27 @@ namespace SOCIS_API.Repositoryies
             ReqLoadData(req);
             return req;
         }
+        public List<Request> GetMyByImpActiveAll(int userId)
+        {
+            var reqs = _context.Requests
+                .Include(x => x.Place)
+                .Include(x => x.RequestStatus)
+                .Where(x => x.IsComplete == false && x.CurrentImplementerId == userId)
+                .ToList();
+            ReqLoadData(reqs);
+            return reqs;
+
+        }
+        public List<Request> GetMyByImpCompletedAll(int userId)
+        {
+            var reqs = _context.Requests
+                .Include(x => x.Place)
+                .Include(x => x.RequestStatus)
+                .Where(x => x.IsComplete == true && x.CurrentImplementerId == userId)
+                .ToList();
+            ReqLoadData(reqs);
+            return reqs;
+        }
         private void ReqLoadData(Request? req)
         {
             if (req is not null)
