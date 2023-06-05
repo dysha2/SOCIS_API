@@ -41,6 +41,11 @@ namespace SOCIS_API.Controllers
         {
             return IRequestRep.GetMyByImpActiveAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
+        [HttpGet("GetByImpActiveAll"), Authorize(Roles = "admin")]
+        public ActionResult<IEnumerable<Request>> GetByImpActiveAll()
+        {
+            return IRequestRep.GetByImpActiveAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+        }
         [HttpGet("GetMyByImpCompletedAll"), Authorize(Roles = "admin,laborant")]
         public ActionResult<IEnumerable<Request>> GetMyByImpCompletedAll()
         {
@@ -59,6 +64,7 @@ namespace SOCIS_API.Controllers
             return IRequestRep.GetAll();
         }
         #endregion
+
         #region Post
         [HttpPost("AddMy"),Authorize]
         public IActionResult AddMy([FromBody]Request req)
@@ -67,7 +73,8 @@ namespace SOCIS_API.Controllers
             {
                 IRequestRep.AddMy(req, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
                 return CreatedAtAction(nameof(GetMy), new { Id = req.Id }, req);
-            } catch (Exception ex)
+            } 
+            catch (Exception ex)
             {
                 return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
             }
@@ -85,7 +92,6 @@ namespace SOCIS_API.Controllers
             {
                 return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
             }
-
         }
         #endregion
         #region Put

@@ -53,7 +53,9 @@ builder.Services.AddDbContext<EquipmentContext>(options => options.UseSqlServer(
 builder.Services.AddTransient<IAuthRep, AuthRep>();
 builder.Services.AddTransient<IRequestRep, RequestRep>();
 builder.Services.AddTransient<IPersonRep, PersonRep>();
+builder.Services.AddTransient<IWorkOnRequestRep, WorkOnRequestRep>();
 builder.Services.AddTransient<ICrudRep, CrudRep<EquipmentContext>>();
+
 
 
 var app = builder.Build();

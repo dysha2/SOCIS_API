@@ -7,40 +7,54 @@
         {
             _context = equipmentContext;
         }
-
-        public void AddMy(WorkOnRequest workOnRequest, int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public WorkOnRequest Get(int id, int userId)
-        {
-            return _context.WorkOnRequests.FirstOrDefault(x => x.Id == id && x.Request.DeclarantId == userId);
-        }
-
-        public WorkOnRequest Get(int id)
-        {
-            throw new NotImplementedException();
-        }
+        #region Get
 
         public List<WorkOnRequest> GetByRequestAll(int reqId)
         {
-            throw new NotImplementedException();
+            var wors = _context.WorkOnRequests.Where(x => x.RequestId == reqId);
+            return LoadData(wors).ToList();
         }
-
-        public WorkOnRequest? GetMy(int id, int userId)
+        public List<WorkOnRequest> GetByMyRequestAll(int reqId,int userId)
         {
-            throw new NotImplementedException();
+            var wors = _context.WorkOnRequests.Where(x => x.RequestId == reqId && x.Request.DeclarantId==userId);
+            return LoadData(wors).ToList();
         }
-
-        public List<WorkOnRequest> GetMyAll(int userId)
+        private IQueryable<WorkOnRequest> LoadData(IQueryable<WorkOnRequest> wors)
         {
-            throw new NotImplementedException();
+            return wors
+                .Include(x => x.Request)
+                .Include(x => x.Service)
+                .Include(x => x.Implementer)
+                .Select(x => new WorkOnRequestDTO(x)
+                {
+                    //Request=new RequestDTO(x.Request),
+                    Service=new ServiceDTO(x.Service),
+                    Implementer=new PersonDTO(x.Implementer)
+                });
         }
-
+        #endregion
+        #region Add
+        public void AddMy(WorkOnRequest workOnRequest, int userId)
+        {
+            WorkOnRequest newWOR = new WorkOnRequest
+            {
+                ImplementerId=userId,
+                RequestId=workOnRequest.RequestId,
+                ServiceId=workOnRequest.ServiceId,
+                Comment=workOnRequest.Comment
+            };
+            _context.WorkOnRequests.Add(newWOR);
+            _context.SaveChanges();
+        }
+        #endregion
+        #region Update
         public void UpdateMy(int wreqId, WorkOnRequest workOnRequest, int userId)
         {
             throw new NotImplementedException();
         }
+        #endregion
+        #region Delete
+
+        #endregion
     }
 }

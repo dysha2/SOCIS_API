@@ -31,6 +31,11 @@ namespace SOCIS_API.Controllers
         {
             return personRep.GetAll();
         }
+        [HttpGet("GetAllLaborants"),Authorize(Roles="admin")]
+        public ActionResult<IEnumerable<Person>> GetAllLaborants()
+        {
+            return personRep.GetAllLaborants();
+        }
         #endregion
         #region Put
         [HttpPut("Update/{id}"), Authorize(Roles = "admin")]

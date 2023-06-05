@@ -10,6 +10,7 @@ namespace SOCIS_API.Repositoryies
         {
             _context = equipmentContext;
         }
+
         #region Get
         public List<Request> GetMyAll(int userId)
         {
@@ -31,24 +32,31 @@ namespace SOCIS_API.Repositoryies
         }
         public Request? GetMy(int id, int userId)
         {
-            var reqs = _context.Requests.AsQueryable();
-            return ReqLoadData(reqs).FirstOrDefault(x=>x.DeclarantId == userId && x.Id == id);
+            var reqs = _context.Requests.Where(x => x.DeclarantId == userId && x.Id == id);
+            return ReqLoadData(reqs).FirstOrDefault();
         }
         public List<Request> GetAll()
         {
-            var reqs = _context.Requests.AsQueryable();
+            var reqs = _context.Requests;
             return ReqLoadData(reqs).ToList();
         }
 
         public Request? Get(int RequestId)
         {
-            var reqs = _context.Requests.AsQueryable();
-            return ReqLoadData(reqs).FirstOrDefault(x => x.Id == RequestId);
+            var reqs = _context.Requests.Where(x => x.Id == RequestId);
+            return ReqLoadData(reqs).FirstOrDefault();
         }
         public List<Request> GetMyByImpActiveAll(int userId)
         {
             var reqs = _context.Requests
                 .Where(x => x.IsComplete == false && x.CurrentImplementerId == userId);
+            return ReqLoadData(reqs).ToList();
+
+        }
+        public List<Request> GetByImpActiveAll(int personId)
+        {
+            var reqs = _context.Requests
+                .Where(x => x.IsComplete == false && x.CurrentImplementerId == personId);
             return ReqLoadData(reqs).ToList();
 
         }
@@ -70,24 +78,30 @@ namespace SOCIS_API.Repositoryies
                     RequestStatus = new RequestStatusDTO(x.RequestStatus)
                 });
         }
-            #endregion
-            #region Add
-            public void AddMy(Request req, int userId)
-        {
-            req.DeclarantId = userId;
-            req.DateTimeStart = new DateTime();
-            req.IsComplete = false;
-            req.DateTimeEnd = null;
-            _context.Requests.Add(req);
-            _context.SaveChanges();
+        #endregion
 
+        #region Add
+        public void AddMy(Request req, int userId)
+        {
+            Request newReq = new Request
+            {
+                DeclarantId = userId,
+                Description = req.Description,
+                PlaceId = req.PlaceId
+
+            };
+            _context.Requests.Add(newReq);
+            _context.SaveChanges();
         }
         public void Add(Request req)
         {
-            req.DateTimeStart = new DateTime();
-            req.IsComplete = false;
-            req.DateTimeEnd = null;
-            _context.Requests.Add(req);
+            Request newReq = new Request
+            {
+                DeclarantId = req.DeclarantId,
+                Description = req.Description,
+                PlaceId = req.PlaceId
+            };
+            _context.Requests.Add(newReq);
             _context.SaveChanges();
         }
         #endregion

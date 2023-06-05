@@ -13,6 +13,7 @@ namespace SOCIS_API.Model
         public int ShortTermMoveId { get; set; }
         public int PlaceId { get; set; }
         public int? WorkOnRequestId { get; set; }
+        public DateTime DateTimeStart { get; set; }
         public DateTime? DateTimeEndPlan { get; set; }
         public DateTime? DateTimeEndFact { get; set; }
         public int UnitId { get; set; }
