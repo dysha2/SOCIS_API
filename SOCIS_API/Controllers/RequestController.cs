@@ -15,17 +15,17 @@ namespace SOCIS_API.Controllers
         }
         #region Get
         [HttpGet("GetMyAll"),Authorize]
-        public IEnumerable<Request> GetMyAll()
+        public ActionResult<IEnumerable<Request>> GetMyAll()
         {
             return IRequestRep.GetMyAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
         [HttpGet("GetMyActiveAll"), Authorize]
-        public IEnumerable<Request> GetMyActiveAll()
+        public ActionResult<IEnumerable<Request>> GetMyActiveAll()
         {
             return IRequestRep.GetMyActiveAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
         [HttpGet("GetMyCompletedAll"), Authorize]
-        public IEnumerable<Request> GetMyCompletedAll()
+        public ActionResult<IEnumerable<Request>> GetMyCompletedAll()
         {
             return IRequestRep.GetMyCompletedAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
@@ -37,12 +37,12 @@ namespace SOCIS_API.Controllers
             return req;
         }
         [HttpGet("GetMyByImpActiveAll"), Authorize(Roles = "admin,laborant")]
-        public IEnumerable<Request> GetMyByImpActiveAll()
+        public ActionResult<IEnumerable<Request>> GetMyByImpActiveAll()
         {
             return IRequestRep.GetMyByImpActiveAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
         [HttpGet("GetMyByImpCompletedAll"), Authorize(Roles = "admin,laborant")]
-        public IEnumerable<Request> GetMyByImpCompletedAll()
+        public ActionResult<IEnumerable<Request>> GetMyByImpCompletedAll()
         {
             return IRequestRep.GetMyByImpCompletedAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }

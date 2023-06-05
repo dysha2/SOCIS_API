@@ -13,101 +13,62 @@ namespace SOCIS_API.Repositoryies
         #region Get
         public List<Request> GetMyAll(int userId)
         {
-            var reqs= _context.Requests
-                .Where(x => x.DeclarantId == userId)
-                .Include(x => x.Place)
-                .Include(x=>x.RequestStatus)
-                .ToList();
-            ReqLoadData(reqs);
-            return reqs;
+            var reqs = _context.Requests.Where(x => x.DeclarantId == userId);
+            return ReqLoadData(reqs).ToList();
         }
         public List<Request> GetMyActiveAll(int userId)
         {
             var reqs = _context.Requests
-                .Where(x => x.DeclarantId == userId && x.IsComplete==false)
-                .Include(x => x.Place)
-                .Include(x => x.RequestStatus)
-                .ToList();
-            ReqLoadData(reqs);
-            return reqs;
+                .Where(x => x.DeclarantId == userId && x.IsComplete == false);
+            return ReqLoadData(reqs).ToList();
         }
 
         public List<Request> GetMyCompletedAll(int userId)
         {
             var reqs = _context.Requests
-                .Where(x => x.DeclarantId == userId && x.IsComplete == true)
-                .Include(x => x.Place)
-                .Include(x => x.RequestStatus)
-                .ToList();
-            ReqLoadData(reqs);
-            return reqs;
+                .Where(x => x.DeclarantId == userId && x.IsComplete == true);
+            return ReqLoadData(reqs).ToList();
         }
         public Request? GetMy(int id, int userId)
         {
-            var req= _context.Requests
-                .Where(x => x.DeclarantId == userId && x.Id == id)
-                .Include(x => x.Place)
-                .Include(x=>x.RequestStatus)
-                .Include(x => x.WorkOnRequests)
-                .FirstOrDefault();
-            ReqLoadData(req);
-            return req;
+            var reqs = _context.Requests.AsQueryable();
+            return ReqLoadData(reqs).FirstOrDefault(x=>x.DeclarantId == userId && x.Id == id);
         }
         public List<Request> GetAll()
         {
-           var reqs= _context.Requests
-                .Include(x => x.Place)
-                .Include(x => x.RequestStatus)
-                .ToList();
-            ReqLoadData(reqs);
-            return reqs;
+            var reqs = _context.Requests.AsQueryable();
+            return ReqLoadData(reqs).ToList();
         }
 
         public Request? Get(int RequestId)
         {
-            var req= _context.Requests
-                .Include(x => x.Place)
-                .Include(x => x.WorkOnRequests)
-                .FirstOrDefault(x => x.Id == RequestId);
-            ReqLoadData(req);
-            return req;
+            var reqs = _context.Requests.AsQueryable();
+            return ReqLoadData(reqs).FirstOrDefault(x => x.Id == RequestId);
         }
         public List<Request> GetMyByImpActiveAll(int userId)
         {
             var reqs = _context.Requests
-                .Include(x => x.Place)
-                .Include(x => x.RequestStatus)
-                .Where(x => x.IsComplete == false && x.CurrentImplementerId == userId)
-                .ToList();
-            ReqLoadData(reqs);
-            return reqs;
+                .Where(x => x.IsComplete == false && x.CurrentImplementerId == userId);
+            return ReqLoadData(reqs).ToList();
 
         }
         public List<Request> GetMyByImpCompletedAll(int userId)
         {
             var reqs = _context.Requests
-                .Include(x => x.Place)
+                .Where(x => x.IsComplete == true && x.CurrentImplementerId == userId);
+            return ReqLoadData(reqs).ToList();
+        }
+        private IQueryable<Request> ReqLoadData(IQueryable<Request> reqs)
+        {
+          return reqs.Include(x => x.Place)
                 .Include(x => x.RequestStatus)
-                .Where(x => x.IsComplete == true && x.CurrentImplementerId == userId)
-                .ToList();
-            ReqLoadData(reqs);
-            return reqs;
-        }
-        private void ReqLoadData(Request? req)
-        {
-            if (req is not null)
-            {
-                req.Place = new PlaceDTO(req.Place);
-                req.RequestStatus = new RequestStatusDTO(req.RequestStatus);
-            }
-        }
-        private void ReqLoadData(List<Request> reqs)
-        {
-            if (reqs.Count > 0)
-            {
-                reqs.ForEach(x => x.Place = new PlaceDTO(x.Place));
-                reqs.ForEach(x => x.RequestStatus = new RequestStatusDTO(x.RequestStatus));
-            }
+                .Include(x => x.Declarant)
+                .Select(x => new RequestDTO(x)
+                {
+                    Declarant = new PersonDTO(x.Declarant),
+                    Place = new PlaceDTO(x.Place),
+                    RequestStatus = new RequestStatusDTO(x.RequestStatus)
+                });
         }
             #endregion
             #region Add
