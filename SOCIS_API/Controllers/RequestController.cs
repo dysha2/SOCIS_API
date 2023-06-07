@@ -41,10 +41,10 @@ namespace SOCIS_API.Controllers
         {
             return IRequestRep.GetMyByImpActiveAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
-        [HttpGet("GetByImpActiveAll"), Authorize(Roles = "admin")]
-        public ActionResult<IEnumerable<Request>> GetByImpActiveAll()
+        [HttpGet("GetByImpActiveAll/{id}"), Authorize(Roles = "admin")]
+        public ActionResult<IEnumerable<Request>> GetByImpActiveAll(int id)
         {
-            return IRequestRep.GetByImpActiveAll(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+            return IRequestRep.GetByImpActiveAll(id);
         }
         [HttpGet("GetMyByImpCompletedAll"), Authorize(Roles = "admin,laborant")]
         public ActionResult<IEnumerable<Request>> GetMyByImpCompletedAll()
