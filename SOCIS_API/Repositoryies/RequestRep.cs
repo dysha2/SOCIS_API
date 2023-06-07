@@ -49,21 +49,25 @@ namespace SOCIS_API.Repositoryies
         public List<Request> GetMyByImpActiveAll(int userId)
         {
             var reqs = _context.Requests
-                .Where(x => x.IsComplete == false && x.CurrentImplementerId == userId);
+                .Where(x => x.RequestStatus.Code == "accepted" && x.WorkOnRequests.Where(y => y.Service.Code == "accept").OrderBy(y => y.DateTime).LastOrDefault().ImplementerId == userId);
             return ReqLoadData(reqs).ToList();
-
         }
         public List<Request> GetByImpActiveAll(int personId)
         {
             var reqs = _context.Requests
-                .Where(x => x.IsComplete == false && x.CurrentImplementerId == personId);
+                .Where(x => x.RequestStatus.Code == "accepted" && x.WorkOnRequests.Where(y => y.Service.Code == "accept").OrderBy(y => y.DateTime).LastOrDefault().ImplementerId == personId);
             return ReqLoadData(reqs).ToList();
 
         }
         public List<Request> GetMyByImpCompletedAll(int userId)
         {
             var reqs = _context.Requests
-                .Where(x => x.IsComplete == true && x.CurrentImplementerId == userId);
+                .Where(x => x.RequestStatus.Code == "complete" && x.WorkOnRequests.Where(y => y.Service.Code == "accept").OrderBy(y => y.DateTime).LastOrDefault().ImplementerId == userId);
+            return ReqLoadData(reqs).ToList();
+        }
+        public List<Request> GetActiveAll()
+        {
+            var reqs = _context.Requests.Where(x => x.RequestStatus.Code == "wait");
             return ReqLoadData(reqs).ToList();
         }
         private IQueryable<Request> ReqLoadData(IQueryable<Request> reqs)
@@ -81,7 +85,7 @@ namespace SOCIS_API.Repositoryies
         #endregion
 
         #region Add
-        public void AddMy(Request req, int userId)
+        public Request AddMy(Request req, int userId)
         {
             Request newReq = new Request
             {
@@ -92,8 +96,9 @@ namespace SOCIS_API.Repositoryies
             };
             _context.Requests.Add(newReq);
             _context.SaveChanges();
+            return newReq;
         }
-        public void Add(Request req)
+        public Request Add(Request req)
         {
             Request newReq = new Request
             {
@@ -103,6 +108,7 @@ namespace SOCIS_API.Repositoryies
             };
             _context.Requests.Add(newReq);
             _context.SaveChanges();
+            return newReq;
         }
         #endregion
         #region Update

@@ -43,8 +43,7 @@ namespace SOCIS_API.Controllers
         {
             try
             {
-                if (id != person.Id) return BadRequest("Id not matched");
-                crudRep.Update(person);
+                personRep.Update(id, person);
                 return NoContent();
             }
             catch (Exception ex)

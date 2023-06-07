@@ -47,7 +47,23 @@ namespace SOCIS_API.Repositoryies
                   });
         }
 
-    #endregion
+        #endregion
 
+        #region Update
+        public void Update(int PersonId,Person person)
+        {
+            Person newPerson = _context.People.Find(PersonId);
+            newPerson.Name = person.Name;
+            newPerson.Surname = person.Surname;
+            newPerson.Lastname = person.Lastname;
+            newPerson.PostId = person.PostId;
+            newPerson.RoleId = person.RoleId;
+            newPerson.DepartmentId = person.DepartmentId;
+            newPerson.Email = person.Email;
+            newPerson.Comment = person.Comment;
+            newPerson.UserName = person.UserName;
+            _context.SaveChanges();
+        }
+        #endregion
     }
 }

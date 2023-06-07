@@ -18,6 +18,11 @@ namespace SOCIS_API.Controllers
             _AuthRep = authRep;
             _Configuration = configuration;
         }
+        [HttpGet("IsAuth"),Authorize]
+        public IActionResult IsAuth()
+        {
+            return Ok();
+        }
 
         [HttpPost("SetNewPassword"),Authorize(Roles ="admin")]
         public IActionResult SetNewPassword(string username,string password)
@@ -28,17 +33,23 @@ namespace SOCIS_API.Controllers
          }
         [HttpPost("Authorize")]
         public IActionResult Authorize(string username,string password){
-            Person? person = _AuthRep.ValidPerson(username, password);
-            if (person is not null)
+            try
             {
-                var identity = new ClaimsIdentity(new[] {
+                Person? person = _AuthRep.ValidPerson(username, password);
+                if (person is not null) 
+                {
+                    var identity = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.Name, person.UserName),
                     new Claim(ClaimTypes.Role, person.Role.Name),
                     new Claim("Id",person.Id.ToString())
                 });
-                return Ok(new { Token = JwtTools.GenerateJwtToken(identity, _Configuration["AuthOptions:key"], _Configuration["AuthOptions:Issuer"], _Configuration["AuthOptions:Audience"])});
-            }
-            return Unauthorized();
+                    return Ok(new { Token = JwtTools.GenerateJwtToken(identity, _Configuration["AuthOptions:key"], _Configuration["AuthOptions:Issuer"], _Configuration["AuthOptions:Audience"]) });
+                }
+                return Unauthorized();
+            } catch (Exception ex)
+            {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }    
         }
     }
 }

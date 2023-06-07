@@ -23,6 +23,13 @@ namespace SOCIS_API.Controllers
         {
             return IWorkOnRequestRep.GetByMyRequestAll(reqId, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
+        [HttpGet("Get/{id}"), Authorize]
+        public ActionResult<WorkOnRequest> Get(int id)
+        {
+            var wor = IWorkOnRequestRep.Get(id);
+            if (wor is null) return NotFound();
+            return wor;
+        }
         #endregion
 
         #region Post
@@ -31,7 +38,47 @@ namespace SOCIS_API.Controllers
         {
             try
             {
-                return Ok();
+                var newWOR=IWorkOnRequestRep.AddMy(wor, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return CreatedAtAction(nameof(Get), new { Id=newWOR.Id}, newWOR);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }
+        }
+        [HttpPost("AddMyAccepted/{reqId}"),Authorize(Roles ="admin,laborant")]
+        public IActionResult AddMyAccepted(int reqId)
+        {
+            try
+            {
+                var newWOR = IWorkOnRequestRep.AddMyAccepted(reqId, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return CreatedAtAction(nameof(Get), new { Id = newWOR.Id }, newWOR);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }
+        }
+        [HttpPost("AddMyRefusal/{reqId}"), Authorize(Roles = "admin,laborant")]
+        public IActionResult AddMyRefusal(int reqId)
+        {
+            try
+            {
+                var newWOR = IWorkOnRequestRep.AddMyRefusal(reqId, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return CreatedAtAction(nameof(Get), new { Id = newWOR.Id }, newWOR);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }
+        }
+        [HttpPost("AddMyComplete/{reqId}"), Authorize(Roles = "admin,laborant")]
+        public IActionResult AddMyComplete(int reqId)
+        {
+            try
+            {
+                var newWOR = IWorkOnRequestRep.AddMyComplete(reqId, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return CreatedAtAction(nameof(Get), new { Id = newWOR.Id }, newWOR);
             }
             catch (Exception ex)
             {

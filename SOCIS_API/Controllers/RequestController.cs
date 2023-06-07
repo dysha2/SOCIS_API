@@ -63,6 +63,11 @@ namespace SOCIS_API.Controllers
         {
             return IRequestRep.GetAll();
         }
+        [HttpGet("GetActiveAll"),Authorize(Roles="admin,laborant")]
+        public ActionResult<IEnumerable<Request>> GetActiveAll()
+        {
+            return IRequestRep.GetActiveAll();
+        }
         #endregion
 
         #region Post
@@ -71,8 +76,8 @@ namespace SOCIS_API.Controllers
         {
             try
             {
-                IRequestRep.AddMy(req, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
-                return CreatedAtAction(nameof(GetMy), new { Id = req.Id }, req);
+                var newReq=IRequestRep.AddMy(req, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return CreatedAtAction(nameof(GetMy), new { Id = newReq.Id }, newReq);
             } 
             catch (Exception ex)
             {
@@ -85,8 +90,8 @@ namespace SOCIS_API.Controllers
         {
             try
             {
-                IRequestRep.Add(req);
-                return CreatedAtAction(nameof(Get), new { Id = req.Id }, req);
+                var newReq=IRequestRep.Add(req);
+                return CreatedAtAction(nameof(Get), new { Id = newReq.Id }, newReq);
             }
             catch (Exception ex)
             {

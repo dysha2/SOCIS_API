@@ -3,7 +3,6 @@ D:\MyProgs\SOCIS_API\SOCIS_API\bin\Release\net6.0\SOCIS_API.exe
 D:\MyProgs\SOCIS_API\SOCIS_API\bin\Release\net6.0\SOCIS_API.deps.json
 D:\MyProgs\SOCIS_API\SOCIS_API\bin\Release\net6.0\SOCIS_API.runtimeconfig.json
 D:\MyProgs\SOCIS_API\SOCIS_API\bin\Release\net6.0\SOCIS_API.dll
-D:\MyProgs\SOCIS_API\SOCIS_API\bin\Release\net6.0\ref\SOCIS_API.dll
 D:\MyProgs\SOCIS_API\SOCIS_API\bin\Release\net6.0\SOCIS_API.pdb
 D:\MyProgs\SOCIS_API\SOCIS_API\bin\Release\net6.0\Humanizer.dll
 D:\MyProgs\SOCIS_API\SOCIS_API\bin\Release\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
@@ -67,3 +66,9 @@ D:\MyProgs\SOCIS_API\SOCIS_API\obj\Release\net6.0\SOCIS_API.dll
 D:\MyProgs\SOCIS_API\SOCIS_API\obj\Release\net6.0\ref\SOCIS_API.dll
 D:\MyProgs\SOCIS_API\SOCIS_API\obj\Release\net6.0\SOCIS_API.pdb
 D:\MyProgs\SOCIS_API\SOCIS_API\obj\Release\net6.0\SOCIS_API.genruntimeconfig.cache
+D:\MyProgs\SOCIS_API\SOCIS_API\obj\Release\net6.0\staticwebassets\msbuild.SOCIS_API.Microsoft.AspNetCore.StaticWebAssets.props
+D:\MyProgs\SOCIS_API\SOCIS_API\obj\Release\net6.0\staticwebassets\msbuild.build.SOCIS_API.props
+D:\MyProgs\SOCIS_API\SOCIS_API\obj\Release\net6.0\staticwebassets\msbuild.buildMultiTargeting.SOCIS_API.props
+D:\MyProgs\SOCIS_API\SOCIS_API\obj\Release\net6.0\staticwebassets\msbuild.buildTransitive.SOCIS_API.props
+D:\MyProgs\SOCIS_API\SOCIS_API\obj\Release\net6.0\staticwebassets.pack.json
+D:\MyProgs\SOCIS_API\SOCIS_API\obj\Release\net6.0\refint\SOCIS_API.dll

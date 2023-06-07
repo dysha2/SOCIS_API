@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\SOCIS_API.props" />
+</Project>
