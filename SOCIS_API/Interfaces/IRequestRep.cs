@@ -16,6 +16,7 @@ namespace SOCIS_API.Interfaces
         List<Request> GetActiveAll();
         Request Add(Request req);
         Request AddMy(Request req, int userId);
+        void Update(int reqId, Request req);
         void UpdateMy(int reqId,Request request,int userId);
         void Delete(int reqId);
     }

@@ -33,8 +33,7 @@ namespace SOCIS_API.Controllers
         public ActionResult<Request> GetMy(int id)
         {
             var req = IRequestRep.GetMy(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
-            if (req is null) return NotFound();
-            return req;
+            return req is null ? NotFound() : req;
         }
         [HttpGet("GetMyByImpActiveAll"), Authorize(Roles = "admin,laborant")]
         public ActionResult<IEnumerable<Request>> GetMyByImpActiveAll()
@@ -55,8 +54,7 @@ namespace SOCIS_API.Controllers
         public ActionResult<Request> Get(int id)
         {
             var req = IRequestRep.Get(id);
-            if (req is null) return NotFound();
-            return req;
+            return req is null?NotFound():req;
         }
         [HttpGet("GetAll"), Authorize(Roles = "admin,laborant")]
         public ActionResult<IEnumerable<Request>> GetAll()
@@ -105,10 +103,31 @@ namespace SOCIS_API.Controllers
         {
             try
             {
+                if (id != newReq.Id)
+                {
+                    return BadRequest("Id not matched");
+                }
                 IRequestRep.UpdateMy(id,newReq, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
                 return NoContent();
             }
             catch (Exception ex) {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }
+        }
+        [HttpPut("Update/{id}"),Authorize(Roles ="admin")]
+        public IActionResult Update(int id, [FromBody] Request newReq)
+        {
+            try
+            {
+                if (id != newReq.Id)
+                {
+                    return BadRequest("Id not matched");
+                }
+                IRequestRep.Update(id,newReq);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
             }
         }

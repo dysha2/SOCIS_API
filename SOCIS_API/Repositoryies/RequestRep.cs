@@ -122,6 +122,15 @@ namespace SOCIS_API.Repositoryies
             updateReq.IsComplete = request.IsComplete;
             _context.SaveChanges();
         }
+        public void Update(int reqId,Request request)
+        {
+            Request updateReq = _context.Requests.Find(reqId);
+            if (updateReq.IsComplete) throw new Exception("Request is complete. Update banned");
+            updateReq.DeclarantId = request.DeclarantId;
+            updateReq.Description = request.Description;
+            updateReq.PlaceId = request.PlaceId;
+            updateReq.IsComplete = request.IsComplete;
+        }
         #endregion
         #region Delete
         public void Delete(int reqId)

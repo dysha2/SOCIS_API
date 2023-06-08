@@ -4,37 +4,37 @@ using Microsoft.AspNetCore.Mvc;
 namespace SOCIS_API.Controllers
 {
     [Route("crud/[controller]")]
-    public class PlaceController : Controller
+    public class RoleController : Controller
     {
         ICrudRep crudRep;
 
-        public PlaceController(ICrudRep crudRep)
+        public RoleController(ICrudRep crudRep)
         {
             this.crudRep = crudRep;
         }
         #region Get
         [HttpGet("GetAll"), Authorize]
-        public ActionResult<IEnumerable<Place>> GetAll()
+        public ActionResult<IEnumerable<Role>> GetAll()
         {
-            return crudRep.Read<Place>();
+            return crudRep.Read<Role>();
         }
-        [HttpGet("Get/{id}"),Authorize]
-        public ActionResult<Place> Get(int id)
+        [HttpGet("Get/{id}"), Authorize]
+        public ActionResult<Role> Get(int id)
         {
-            Place place = crudRep.Read<Place>(id);
-            return place is null ? NotFound() : place;
+            Role Role = crudRep.Read<Role>(id);
+            return Role is null ? NotFound() : Role;
         }
         #endregion
 
         #region Post
-        [HttpPost("Add"),Authorize(Roles ="admin,laborant")]
-        public IActionResult Add([FromBody] Place place)
+        [HttpPost("Add"), Authorize(Roles = "admin")]
+        public IActionResult Add([FromBody] Role Role)
         {
             try
             {
-                Place newPlace = crudRep.Create(place);
-                if (newPlace is null) return BadRequest();
-                return CreatedAtAction(nameof(Get), new { Id = newPlace.Id }, newPlace);
+                Role newRole = crudRep.Create(Role);
+                if (newRole is null) return BadRequest();
+                return CreatedAtAction(nameof(Get), new { Id = newRole.Id }, newRole);
             }
             catch (Exception ex)
             {
@@ -44,31 +44,33 @@ namespace SOCIS_API.Controllers
         #endregion
 
         #region Put
-        [HttpPut("Update/{id}"),Authorize(Roles ="admin,laborant")]
-        public IActionResult Update(int id,[FromBody]Place place)
+        [HttpPut("Update/{id}"), Authorize(Roles = "admin")]
+        public IActionResult Update(int id, [FromBody] Role Role)
         {
-            try { 
-                if (id != place.Id)
+            try
+            {
+                if (id != Role.Id)
                 {
                     return BadRequest("Id not matched");
                 }
-                crudRep.Update(place);
+                crudRep.Update(Role);
                 return NoContent();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
             }
         }
         #endregion
         #region Delete
-        [HttpDelete("Delete/{id}"),Authorize(Roles ="admin,laborant")]
+        [HttpDelete("Delete/{id}"), Authorize(Roles = "admin")]
         public ActionResult Delete(int id)
         {
             try
             {
-                var place = crudRep.Read<Place>(id);
-                if (place is null) return NotFound();
-                crudRep.Delete(place);
+                var Role = crudRep.Read<Role>(id);
+                if (Role is null) return NotFound();
+                crudRep.Delete(Role);
                 return NoContent();
             }
             catch (Exception ex)

@@ -27,8 +27,7 @@ namespace SOCIS_API.Controllers
         public ActionResult<WorkOnRequest> Get(int id)
         {
             var wor = IWorkOnRequestRep.Get(id);
-            if (wor is null) return NotFound();
-            return wor;
+            return wor is null?NotFound():wor;
         }
         #endregion
 
