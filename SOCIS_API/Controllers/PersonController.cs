@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SOCIS_API.Model;
 
 namespace SOCIS_API.Controllers
 {
@@ -43,6 +44,10 @@ namespace SOCIS_API.Controllers
         {
             try
             {
+                if (person.Id != id)
+                {
+                    return BadRequest("Id not matched");
+                }
                 personRep.Update(id, person);
                 return NoContent();
             }
@@ -59,8 +64,8 @@ namespace SOCIS_API.Controllers
         {
             try
             {
-                crudRep.Create(person);
-                return CreatedAtAction(nameof(Get), new { id = person.Id }, person);
+                Person newPerson = personRep.Add(person);
+                return CreatedAtAction(nameof(Get), new { id = newPerson.Id }, newPerson);
             }
             catch (Exception ex)
             {
@@ -69,6 +74,20 @@ namespace SOCIS_API.Controllers
         }
         #endregion
 
-
+        #region Delete
+        [HttpDelete("Delete/{id}"),Authorize(Roles ="admin")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                personRep.Delete(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }
+        }
+        #endregion
     }
 }

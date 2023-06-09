@@ -55,7 +55,7 @@ builder.Services.AddTransient<IRequestRep, RequestRep>();
 builder.Services.AddTransient<IPersonRep, PersonRep>();
 builder.Services.AddTransient<IWorkOnRequestRep, WorkOnRequestRep>();
 builder.Services.AddTransient<ICrudRep, CrudRep<EquipmentContext>>();
-
+builder.Services.AddTransient<IRequestUnitsRep, RequestUnitsRep>();
 
 
 var app = builder.Build();

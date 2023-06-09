@@ -49,6 +49,27 @@ namespace SOCIS_API.Repositoryies
 
         #endregion
 
+        #region Add
+        public Person Add(Person person)
+        {
+            var per = new Person
+            {
+                Name=person.Name,
+                Surname=person.Surname,
+                Lastname=person.Lastname,
+                PostId=person.PostId,
+                RoleId=person.RoleId,
+                DepartmentId=person.DepartmentId,
+                Email=person.Email,
+                Comment=person.Comment,
+                UserName=person.UserName
+            };
+            _context.People.Add(per);
+            _context.SaveChanges();
+            return per;
+        }
+        #endregion
+
         #region Update
         public void Update(int PersonId,Person person)
         {
@@ -62,6 +83,15 @@ namespace SOCIS_API.Repositoryies
             newPerson.Email = person.Email;
             newPerson.Comment = person.Comment;
             newPerson.UserName = person.UserName;
+            _context.SaveChanges();
+        }
+        #endregion
+
+        #region Delete
+        public void Delete(int PersonId)
+        {
+            Person person = _context.People.Find(PersonId);
+            _context.People.Remove(person);
             _context.SaveChanges();
         }
         #endregion
