@@ -9,7 +9,7 @@
         public WorkOnRequest AddMyAccepted(int reqId,int userId);
         public WorkOnRequest AddMyRefusal(int reqId, int userId);
         public WorkOnRequest AddMyComplete(int reqId,int userId);
-        public void UpdateMy(int wreqId,WorkOnRequest workOnRequest,int userId);
+        public void UpdateMy(int worId,WorkOnRequest workOnRequest,int userId);
 
     }
 }

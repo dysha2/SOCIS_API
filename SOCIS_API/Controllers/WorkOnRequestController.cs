@@ -23,7 +23,7 @@ namespace SOCIS_API.Controllers
         {
             return IWorkOnRequestRep.GetByMyRequestAll(reqId, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
-        [HttpGet("Get/{id}"), Authorize]
+        [HttpGet("Get/{id}"), Authorize(Roles ="admin,laborant")]
         public ActionResult<WorkOnRequest> Get(int id)
         {
             var wor = IWorkOnRequestRep.Get(id);
@@ -78,6 +78,25 @@ namespace SOCIS_API.Controllers
             {
                 var newWOR = IWorkOnRequestRep.AddMyComplete(reqId, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
                 return CreatedAtAction(nameof(Get), new { Id = newWOR.Id }, newWOR);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }
+        }
+        #endregion
+        #region Put
+        [HttpPut("UpdateMy/{id}"),Authorize(Roles ="admin,laborant")]
+        public IActionResult UpdateMy(int id, [FromBody] WorkOnRequest wor)
+        {
+            try
+            {
+                if (id != wor.Id)
+                {
+                    return BadRequest("Id not matched");
+                }
+                IWorkOnRequestRep.UpdateMy(id,wor, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return NoContent();
             }
             catch (Exception ex)
             {

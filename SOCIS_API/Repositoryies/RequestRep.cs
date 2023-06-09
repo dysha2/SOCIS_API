@@ -130,6 +130,7 @@ namespace SOCIS_API.Repositoryies
             updateReq.Description = request.Description;
             updateReq.PlaceId = request.PlaceId;
             updateReq.IsComplete = request.IsComplete;
+            _context.SaveChanges();
         }
         #endregion
         #region Delete

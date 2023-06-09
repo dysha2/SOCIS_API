@@ -1,5 +1,4 @@
 ﻿using SOCIS_API.Model;
-
 namespace SOCIS_API.Repositoryies
 {
     public class WorkOnRequestRep : IWorkOnRequestRep
@@ -34,7 +33,7 @@ namespace SOCIS_API.Repositoryies
                 .Include(x => x.Implementer)
                 .Select(x => new WorkOnRequestDTO(x)
                 {
-                    //Request=new RequestDTO(x.Request),
+                    Request=new RequestDTO(x.Request),
                     Service=new ServiceDTO(x.Service),
                     Implementer=new PersonDTO(x.Implementer)
                 });
@@ -49,7 +48,7 @@ namespace SOCIS_API.Repositoryies
             if (req.RequestStatus.Code == "wait") throw new Exception("Request is not accepted. You can`t add work on request");
             if (req.IsComplete == true) throw new Exception("Request is complete. You can`t add work on request");
             Service service = _context.Services.Find(workOnRequest.ServiceId);
-            if ((service.Code == "accept") || (service.Code == "refusal")) throw new Exception("You can`t execute this service in this method");
+            if ((service.Code == "accept") || (service.Code == "refusal")||(service.Code=="complete")) throw new Exception("You can`t execute this service in this method");
             WorkOnRequest newWOR = new WorkOnRequest
             {
                 ImplementerId=userId,
@@ -122,12 +121,29 @@ namespace SOCIS_API.Repositoryies
         }
         #endregion
         #region Update
-        public void UpdateMy(int wreqId, WorkOnRequest workOnRequest, int userId)
+        public void UpdateMy(int worId, WorkOnRequest workOnRequest, int userId)
         {
-            throw new NotImplementedException();
+            var wor = _context.WorkOnRequests
+                .Include(x=>x.Service)
+                .FirstOrDefault(x => x.Id == worId);
+            if (wor is null) throw new Exception("Work on request not found");
+            if (wor.ImplementerId != userId) throw new Exception("This work in request is not your. Update banned");
+            if ((wor.Service.Code == "accept") 
+                || (wor.Service.Code == "complete") 
+                || (wor.Service.Code == "refusal")) 
+                throw new Exception("You can`t change work on request with this service");
+            var newService = _context.Services.Find(workOnRequest.ServiceId);
+            if (newService is null) throw new Exception("Service is required field");
+            if ((newService.Code == "accept")
+                || (newService.Code == "complete")
+                || (newService.Code == "refusal"))
+                throw new Exception("You can`t change service to this");
+            wor.ServiceId = workOnRequest.ServiceId;
+            wor.Comment = workOnRequest.Comment;
+            _context.SaveChanges();
         }
 
-        
+         
 
 
         #endregion
