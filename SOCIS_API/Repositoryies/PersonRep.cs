@@ -36,10 +36,13 @@ namespace SOCIS_API.Repositoryies
             var people = _context.People.Where(x => x.Id == userId);
             return LoadData(people).FirstOrDefault();
         }
+        public Person? GetRespPerson(int unitId)
+        {
+            return LoadData(_context.UnitRespPeople.Where(x => x.UnitId == unitId && x.DateEnd == null).Select(x => x.Person)).FirstOrDefault();
+        }
         private IQueryable<Person> LoadData(IQueryable<Person> people)
         {
-            return people.Include(x => x.Post)
-                  .Include(x => x.Department)
+            return people
                   .Select(x => new PersonDTO(x)
                   {
                       Post = x.Post != null ? new PostDTO(x.Post) : null,

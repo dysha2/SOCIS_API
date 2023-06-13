@@ -4,37 +4,39 @@ using Microsoft.AspNetCore.Mvc;
 namespace SOCIS_API.Controllers
 {
     [Route("crud/[controller]")]
-    public class FirmController : Controller
+    public class FullNameUnitController : Controller
     {
         ICrudRep crudRep;
+        IFullNameUnitRep fullNameUnitRep;
 
-        public FirmController(ICrudRep crudRep)
+        public FullNameUnitController(ICrudRep crudRep, IFullNameUnitRep fullNameUnitRep)
         {
             this.crudRep = crudRep;
+            this.fullNameUnitRep = fullNameUnitRep;
         }
         #region Get
         [HttpGet("GetAll"), Authorize]
-        public ActionResult<IEnumerable<Firm>> GetAll()
+        public ActionResult<IEnumerable<FullNameUnit>> GetAll()
         {
-            return crudRep.Read<Firm>();
+            return fullNameUnitRep.GetAll();
         }
         [HttpGet("Get/{id}"), Authorize]
-        public ActionResult<Firm> Get(int id)
+        public ActionResult<FullNameUnit> Get(int id)
         {
-            Firm Firm = crudRep.Read<Firm>(id);
-            return Firm is null ? NotFound() : Firm;
+            FullNameUnit FullNameUnit = fullNameUnitRep.Get(id);
+            return FullNameUnit is null ? NotFound() : FullNameUnit;
         }
         #endregion
 
         #region Post
         [HttpPost("Add"), Authorize(Roles = "admin,laborant")]
-        public IActionResult Add([FromBody] Firm Firm)
+        public IActionResult Add([FromBody] FullNameUnit FullNameUnit)
         {
             try
             {
-                Firm newFirm = crudRep.Create(Firm);
-                if (newFirm is null) return BadRequest();
-                return CreatedAtAction(nameof(Get), new { Id = newFirm.Id }, newFirm);
+                FullNameUnit newFullNameUnit = crudRep.Create(FullNameUnit);
+                if (newFullNameUnit is null) return BadRequest();
+                return CreatedAtAction(nameof(Get), new { Id = newFullNameUnit.Id }, newFullNameUnit);
             }
             catch (Exception ex)
             {
@@ -45,15 +47,15 @@ namespace SOCIS_API.Controllers
 
         #region Put
         [HttpPut("Update/{id}"), Authorize(Roles = "admin,laborant")]
-        public IActionResult Update(int id, [FromBody] Firm Firm)
+        public IActionResult Update(int id, [FromBody] FullNameUnit FullNameUnit)
         {
             try
             {
-                if (id != Firm.Id)
+                if (id != FullNameUnit.Id)
                 {
                     return BadRequest("Id not matched");
                 }
-                crudRep.Update(Firm);
+                crudRep.Update(FullNameUnit);
                 return NoContent();
             }
             catch (Exception ex)
@@ -68,9 +70,9 @@ namespace SOCIS_API.Controllers
         {
             try
             {
-                var Firm = crudRep.Read<Firm>(id);
-                if (Firm is null) return NotFound();
-                crudRep.Delete(Firm);
+                var FullNameUnit = crudRep.Read<FullNameUnit>(id);
+                if (FullNameUnit is null) return NotFound();
+                crudRep.Delete(FullNameUnit);
                 return NoContent();
             }
             catch (Exception ex)

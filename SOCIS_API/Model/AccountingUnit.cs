@@ -33,6 +33,18 @@ namespace SOCIS_API.Model
         public int FullNameUnitId { get; set; }
         [StringLength(512)]
         public string? Comment { get; set; }
+        [NotMapped]
+        public Place CurrentPlace
+        {
+            get
+            {
+                var place = ShortTermMoves.Where(x => x.UnitId == Id && x.DateTimeEndFact == null).Select(x => x.Place).FirstOrDefault();
+                if (place is null)
+                    return UnitPlaces.Where(x => x.UnitId == Id && x.DateEnd == null).Select(x => x.Place).FirstOrDefault();
+                else
+                    return place;
+            }
+        }
 
         [ForeignKey("FullNameUnitId")]
         [InverseProperty("AccountingUnits")]

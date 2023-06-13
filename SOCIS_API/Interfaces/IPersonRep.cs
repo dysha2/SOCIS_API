@@ -6,6 +6,7 @@
         List<Person> GetAllLaborants();
         Person? Get(int PersonId);
         Person? GetMy(int userId);
+        Person? GetRespPerson(int unitId);
         Person Add(Person person);
         void Update(int PersonId, Person person);
         void Delete(int PersonId);

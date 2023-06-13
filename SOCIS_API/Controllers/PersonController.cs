@@ -7,13 +7,11 @@ namespace SOCIS_API.Controllers
     [Route("crud/[controller]")]
     public class PersonController : Controller
     {
-        ICrudRep crudRep;
         IPersonRep personRep;
 
-        public PersonController(ICrudRep crudRep, IPersonRep personRep)
+        public PersonController(IPersonRep personRep)
         {
             this.personRep = personRep;
-            this.crudRep = crudRep;
         }
         #region Get
         [HttpGet("Get/{id}"), Authorize(Roles = "admin,laborant")]
@@ -37,7 +35,14 @@ namespace SOCIS_API.Controllers
         {
             return personRep.GetAllLaborants();
         }
+        [HttpGet("GetRespPerson/{id}"),Authorize(Roles ="admin,laborants")]
+        public ActionResult<Person> GetRespPerson(int id)
+        {
+            var person = personRep.GetRespPerson(id);
+            return person == null ? NotFound() : person;
+        }
         #endregion
+
         #region Put
         [HttpPut("Update/{id}"), Authorize(Roles = "admin")]
         public IActionResult Update(int id, [FromBody] Person person)

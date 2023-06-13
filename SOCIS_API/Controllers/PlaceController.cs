@@ -7,16 +7,24 @@ namespace SOCIS_API.Controllers
     public class PlaceController : Controller
     {
         ICrudRep crudRep;
+        IPlaceRep placeRep;
 
-        public PlaceController(ICrudRep crudRep)
+        public PlaceController(ICrudRep crudRep, IPlaceRep placeRep)
         {
             this.crudRep = crudRep;
+            this.placeRep = placeRep;
         }
         #region Get
         [HttpGet("GetAll"), Authorize]
         public ActionResult<IEnumerable<Place>> GetAll()
         {
             return crudRep.Read<Place>();
+        }
+        [HttpGet("GetCurrentPlace/{id}")]
+        public ActionResult<Place> GetCurrentPlace(int id)
+        {
+            var place = placeRep.CurrentPlace(id);
+            return place is null ? NotFound() : place;
         }
         [HttpGet("Get/{id}"),Authorize]
         public ActionResult<Place> Get(int id)
@@ -52,8 +60,8 @@ namespace SOCIS_API.Controllers
                 {
                     return BadRequest("Id not matched");
                 }
-                crudRep.Update(place);
-                return NoContent();
+                return crudRep.Update(place) ? NoContent() : NotFound();
+
             }
             catch (Exception ex) {
                 return BadRequest(ValidateAndErrorsTools.GetInfo(ex));

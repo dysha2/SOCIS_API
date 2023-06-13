@@ -56,6 +56,12 @@ builder.Services.AddTransient<IPersonRep, PersonRep>();
 builder.Services.AddTransient<IWorkOnRequestRep, WorkOnRequestRep>();
 builder.Services.AddTransient<ICrudRep, CrudRep<EquipmentContext>>();
 builder.Services.AddTransient<IRequestUnitsRep, RequestUnitsRep>();
+builder.Services.AddTransient<IFullNameUnitRep, FullNameUnitRep>();
+builder.Services.AddTransient<IUnitRespPersonRep, UnitRespPersonRep>();
+builder.Services.AddTransient<IPlaceRep, PlaceRep>();
+builder.Services.AddTransient<IUnitPlaceRep, UnitPlaceRep>();
+builder.Services.AddTransient<IShortTermMoveRep, ShortTermMoveRep>();
+builder.Services.AddTransient<IAccountingUnitRep, AccountingUnitRep>();
 
 
 var app = builder.Build();

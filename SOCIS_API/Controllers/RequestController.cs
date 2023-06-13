@@ -9,9 +9,11 @@ namespace SOCIS_API.Controllers
     public class RequestController : Controller
     {
         IRequestRep IRequestRep;
-        public RequestController(IRequestRep iRequestRep)
+        ICrudRep crudRep;
+        public RequestController(IRequestRep iRequestRep, ICrudRep crudRep)
         {
             IRequestRep = iRequestRep;
+            this.crudRep = crudRep;
         }
         #region Get
         [HttpGet("GetMyAll"),Authorize]
@@ -132,7 +134,23 @@ namespace SOCIS_API.Controllers
             }
         }
         #endregion
+
         #region Delete
+        [HttpDelete("Delete/{id}"), Authorize(Roles = "admin")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                var place = crudRep.Read<Request>(id);
+                if (place is null) return NotFound();
+                crudRep.Delete(place);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }
+        }
         #endregion
     }
 }
