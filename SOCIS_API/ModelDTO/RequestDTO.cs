@@ -14,6 +14,7 @@ namespace SOCIS_API.ModelDTO
             PlaceId = req.PlaceId;
             IsComplete = req.IsComplete;
             RequestStatusId = req.RequestStatusId;
+            Importance = req.Importance;
         }
 
         [Key]
@@ -28,6 +29,7 @@ namespace SOCIS_API.ModelDTO
         public int PlaceId { get; set; }
         public bool IsComplete { get; set; }
         public int RequestStatusId { get; set; }
+        public int? Importance { get; set; }
     }
 
 }

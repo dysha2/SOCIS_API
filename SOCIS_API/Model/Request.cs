@@ -26,6 +26,7 @@ namespace SOCIS_API.Model
         public int PlaceId { get; set; }
         public bool IsComplete { get; set; }
         public int RequestStatusId { get; set; }
+        public int? Importance { get; set; }
 
         [ForeignKey("DeclarantId")]
         [InverseProperty("Requests")]
