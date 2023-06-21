@@ -7,10 +7,12 @@ namespace SOCIS_API.Controllers
     public class WorkOnRequestController : Controller
     {
         private IWorkOnRequestRep IWorkOnRequestRep;
+        private ICrudRep ICrudRep;
 
-        public WorkOnRequestController(IWorkOnRequestRep iWorkOnRequestRep)
+        public WorkOnRequestController(IWorkOnRequestRep iWorkOnRequestRep, ICrudRep iCrudRep)
         {
             IWorkOnRequestRep = iWorkOnRequestRep;
+            ICrudRep = iCrudRep;
         }
         #region Get
         [HttpGet("GetByRequestAll/{reqId}"),Authorize(Roles ="admin,laborant")]
@@ -32,6 +34,20 @@ namespace SOCIS_API.Controllers
         #endregion
 
         #region Post
+        [HttpPost("Add"),Authorize(Roles ="admin")]
+        public IActionResult Add([FromBody] WorkOnRequest wor)
+        {
+            try
+            {
+                var newWor = ICrudRep.Create(wor);
+                if (newWor is null) return BadRequest();
+                return CreatedAtAction(nameof(Get), new { Id = newWor.Id }, newWor);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ValidateAndErrorsTools.GetInfo(ex));
+            }
+        }
         [HttpPost("AddMy"),Authorize(Roles="admin,laborant")]
         public IActionResult AddMy([FromBody] WorkOnRequest wor)
         {

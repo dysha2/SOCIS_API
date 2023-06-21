@@ -13,7 +13,6 @@
         {
             return LoadData(_context.UnitPlaces.Where(x => x.Id == id)).FirstOrDefault();
         }
-
         public List<UnitPlace> GetAllActiveByPlace(int placeId)
         {
             return LoadData(_context.UnitPlaces.Where(x => x.PlaceId == placeId && x.DateEnd == null)).ToList();

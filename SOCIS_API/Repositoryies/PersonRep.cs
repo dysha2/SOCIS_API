@@ -46,6 +46,7 @@ namespace SOCIS_API.Repositoryies
                   .Select(x => new PersonDTO(x)
                   {
                       Post = x.Post != null ? new PostDTO(x.Post) : null,
+                      Role = new RoleDTO(x.Role),
                       Department = x.Department != null ? new DepartmentDTO(x.Department) : null
                   });
         }
