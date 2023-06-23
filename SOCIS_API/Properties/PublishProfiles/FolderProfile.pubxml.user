@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>D:\MyProgs\SOCIS_API_RELEASE</_PublishTargetUrl>
-    <History>True|2023-06-17T05:20:13.5974458Z;True|2023-06-07T11:04:17.0070327+05:00;True|2023-06-07T10:39:47.5387946+05:00;True|2023-06-07T10:02:46.4136776+05:00;</History>
+    <History>True|2023-06-22T05:53:10.9769560Z;True|2023-06-17T10:20:13.5974458+05:00;True|2023-06-07T11:04:17.0070327+05:00;True|2023-06-07T10:39:47.5387946+05:00;True|2023-06-07T10:02:46.4136776+05:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>

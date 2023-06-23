@@ -40,7 +40,10 @@ namespace SOCIS_API.Repositoryies
         {
             return LoadData(_context.ShortTermMoves.Where(x => x.UnitId==unitId)).ToList();
         }
-
+        public List<ShortTermMove> GetAllActive()
+        {
+            return LoadData(_context.ShortTermMoves.Where(x => x.DateTimeEndFact == null)).ToList();
+        }
         public List<ShortTermMove> GetAllOldByPlace(int placeId)
         {
             return LoadData(_context.ShortTermMoves.Where(x => x.PlaceId == placeId && x.DateTimeEndFact != null)).ToList();

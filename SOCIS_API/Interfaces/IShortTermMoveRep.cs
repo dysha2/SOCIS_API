@@ -6,6 +6,7 @@
         List<ShortTermMove> GetAllActiveByPlace(int placeId);
         List<ShortTermMove> GetAllOldByPlace(int placeId);
         List<ShortTermMove> GetAllByUnit(int unitId);
+        List<ShortTermMove> GetAllActive();
         ShortTermMove Add(ShortTermMove ShortTermMove);
     }
 }

@@ -26,6 +26,11 @@ namespace SOCIS_API.Controllers
         {
             return ShortTermMoveRep.GetAllActiveByPlace(id);
         }
+        [HttpGet("GetAllActive"), Authorize(Roles ="admin,laborant")]
+        public ActionResult<List<ShortTermMove>> GetAllActive()
+        {
+            return ShortTermMoveRep.GetAllActive();
+        }
         [HttpGet("GetAllOldByPlace/{id}"), Authorize]
         public ActionResult<List<ShortTermMove>> GetAllOldByPlace(int id)
         {
